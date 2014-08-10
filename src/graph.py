@@ -118,3 +118,213 @@ def upperTriangleToGraph(bits):
                     graph[j].append(i)
                 pos += 1
     return graph
+
+# =============================================================================
+# Section 2: Graph Classes
+# ==============================================================================
+# Graph
+# ==============================================================================
+class Graph:
+    "Class representing an undirected graph with colorable vertices"
+    def __init__(self,vertices=0,adjList=None):
+        self.g = []
+        self.labels = []
+        self.colors = []
+        self.name = ""			
+
+        if( adjList != None and isinstance(adjList,str)):
+            line = adjList.split(':')
+            if(len(line) != 5):
+                raise Exception("Invalid Graph String Format: " + adjList)
+            self.name = line[0]
+            self.resetVertices( int(line[1]) )
+            pos=0
+            adj = line[4]
+            for i in xrange(self.numVertices()):
+                for j in xrange(self.numVertices()):
+                    if( i > j ):
+                        if( int(adj[pos]) == 0 ):
+                            self.g[i][j] = 0
+                            self.g[j][i] = 0
+                        else:
+                            self.g[i][j] = 1
+                            self.g[j][i] = 1
+                        pos += 1
+                    elif( i == j):
+                        self.g[i][j] = 0					
+        else:
+            self.resetVertices( vertices )
+
+
+    def resetVertices(self, n):
+        "Resets the number if vertices in the graph to the value specified by n and clears all edges"
+        self.g = []
+        self.labels = []		
+
+        for i in xrange( n ):
+            self.g.append([])
+            self.labels.append("")
+            for j in xrange( n ):
+                self.g[i].append(0)
+
+    def numVertices(self):
+        return len(self.g)
+
+    def numEdges(self):
+        count = 0
+        for i in xrange(len(self.g)):
+            for j in xrange(len(self.g[i])):
+                if( i > j and self.g[i][j] == 1):
+                    count += 1
+        return count
+
+    def setEdge(self, v1, v2 ):
+        self.g[v1][v2] = 1
+        self.g[v2][v1] = 1
+
+    def resetEdge(self, v1, v2 ):
+        self.g[v1][v2] = 0
+        self.g[v2][v1] = 0
+
+    def getEdge(self, v1, v2 ):
+        return self.g[v1][v2]
+
+    def printLowerDiag(self):		
+        result = ""
+        for i in range(len(self.g)):
+            for j in range(len(self.g[i])):
+                if( i > j ):
+                    result = result + str(self.g[i][j])
+        print result
+
+    def __str__(self):
+        result = self.name + ":" + str(self.numVertices()) + ":" + str(self.numEdges()) + ":" + str((self.numVertices() * (self.numVertices()-1)) / 2) + ":"
+        for i in xrange(self.numVertices()):
+            for j in xrange(self.numVertices()):
+                if( i > j ):
+                    result = result + str(self.g[i][j])
+        return result
+
+    def printDBFormat(self):
+        print self
+
+    def printGraph(self):
+        line = ""
+        for i in range(len(self.g)):
+            for j in range(len(self.g[i])):
+                 line += str(self.g[i][j]) + " "
+            print line
+            line = ""
+
+    def dumpEpsEquations(self):
+        line = ""
+        for i in range(len(self.g)):
+            for j in range(len(self.g[i])):
+                if( i > j and self.g[i][j] == 1):
+                    x1 = "x" + str(i)
+                    y1 = "y" + str(i)
+                    x2 = "x" + str(j)
+                    y2 = "y" + str(j)
+                    line += "( " + x2 + " - " + x1 + " )^2 + " + "( " + y2 + " - " + y1 + " )^2 - 1 = 0,\n"
+        print line
+
+
+    def clear(self):
+        for i in self.g:
+            for j in i:
+                j = 0
+
+    def degree(self,v):
+        d = 0
+        for i in xrange(self.numVertices()):
+            if( self.g[v][i] == 1):
+                d += 1
+        return d
+
+#==============================================================================
+# Vertex
+#==============================================================================
+class Vertex:
+
+    def __init__(self,id=0,color=-1):
+        self.id = id
+        self.color = color
+        self.adj = Set([])
+
+    def __eq__(self,other):
+        return self.id == other.id
+
+    def __hash__(self):
+        if not self:
+            return 0
+        value = self.id
+        if value == -1:
+            value = -2
+        return value	
+
+    def Degree(self):
+        return len(adj)
+		
+#==============================================================================
+# GraphEx
+#==============================================================================
+class GraphEx:
+
+    def __init__(self, gObject=None):
+        self.vertices = Set([])
+
+    def AddVertex(self,v):
+        self.vertices.add(v)
+
+    def RemoveVertex(self,v):
+        for i in self.vertices:
+            i.adj.discard(v)
+        self.vertices.discard(v)
+
+    def AddEdge(self,v1,v2):
+        if( ( v1 != v2 ) and (v1 in self.vertices) and (v2 in self.vertices) ):
+            v1.adj.add(v2)
+            v2.adj.add(v1)
+
+    def RemoveEdge(self,v1,v2):
+        v1.adj.discard(v2)
+        v2.adj.discard(v1)
+
+    def NumVertices(self):
+        return len(self.vertices)
+
+    def NumEdges(self):
+        count=0
+        for i in self.vertices:
+            count += len(i.adj)
+        return count/2
+
+    def PrintGraph(self):
+        for i in self.vertices:
+            line = str(i.id) + "[" + str(i.color) + "]: "
+            for j in i.adj:
+                line += " -> (" + str(j.id) + ")"
+            print line
+		
+#==============================================================================
+# GraphToGraphEx
+#==============================================================================
+def GraphToGraphEx( g ):
+    gex = GraphEx()
+    vList = []
+    for i in xrange(g.numVertices()):
+        v = Vertex(i)
+        vList.append(v)
+
+    for i in vList:
+        for j in xrange(g.numVertices()):
+            if(g.g[i.id][j] == 1):
+                i.adj.add(vList[j])
+    gex.vertices = Set(vList)
+    return gex
+
+	
+# For testing	
+if __name__ == "__main__":
+    tg = { 'A': ['B','D'], 'B': ['A','C'], 'C': ['B','D'], 'D': ['C','A'] }
+
