@@ -166,7 +166,7 @@ def unlabeledCompliment(vertices):
                     L.append(trial)
                     yield(L[-1])
                     yield(graph.compliment(L[-1]))
-        print "Generating: graphs on",Graph.edgecount(Lm[0])+1,"edges("+str(len(L))+")"
+        print "Generating: graphs on",graph.edgecount(Lm[0])+1,"edges("+str(len(L))+")"
 
         Lm = L
         L = []

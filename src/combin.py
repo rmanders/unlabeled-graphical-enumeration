@@ -49,7 +49,7 @@ def partition(n, g):
 def numParitions(n):
     '''Returns the total number of ways to partition a set
     of n elements.'''
-    sum = 0:
+    sum = 0
     for i in range(1, n+1, 1):
         sum += partition(n,i)
     return sum
