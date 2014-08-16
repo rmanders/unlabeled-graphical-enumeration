@@ -1,5 +1,7 @@
 #!/bin/usr/env python
 
+'''Primary script for testing'''
+
 from orderly import *
 
 
