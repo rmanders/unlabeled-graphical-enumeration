@@ -2,8 +2,14 @@
 
 from orderly import *
 
-edges = 4
-g = unlabeledCompliment(4)
 
-for i in g:
-	print g
+def main():
+    edges = 4
+    g = unlabeledCompliment(4)
+
+    for i in g:
+        print i
+
+if __name__ == "__main__":
+	main()
+
