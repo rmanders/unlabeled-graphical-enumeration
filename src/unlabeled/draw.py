@@ -7,7 +7,7 @@ from graph import *
 hasPIL = True
 
 try:
-    import Image, ImageDraw
+    from PIL import Image, ImageDraw
 except:
     hasPIL = False
 
