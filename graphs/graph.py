@@ -1,10 +1,10 @@
-'''
+"""
 Functions for operations on graphs. 
 
 The datatype used for a graph is a dictionary of lists,
 where the key is the node number and the list is an
 adjacency list of node numbers.
-'''
+"""
 
 __author__ = "Ryan Anderson"
 
@@ -57,14 +57,14 @@ def getLowerTriangleString(graph):
 
 def getCode(graph):
     '''Returns the integer value of the upper triangle of the graph's 
-    adjacency matrix. A simple graph is assumed (i.e. not mutliple edges and no 
+    adjacency matrix. A simple graph is assumed (i.e. not multiple edges and no
     self-loops'''
 
     label = getUpperTriangleString(graph)
     return int(label,2)
 
-def compliment(graph):
-    '''Returns the compliment of the graph (exitsing edges become non-edges, non-edges 
+def complement(graph):
+    '''Returns the complement of the graph (existing edges become non-edges, non-edges
     become edges.'''
     comp = {}
     for n in graph.keys():
